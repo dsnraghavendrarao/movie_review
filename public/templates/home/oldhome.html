@@ -1,0 +1,111 @@
+
+<!-- Render Nav bar-->
+<div ng-include src="'/templates/posts/nav.html'"></div>
+<div>
+          <div class="container" style="background-color:rgb(206, 206, 206);margin-top: -27px;">
+          <!-- container1-->
+                  <div class="container" style="height:400px  ">
+              <!-- slider -->        
+                      <div id="slides_control">
+                    
+                            <carousel interval="myInterval">
+                              <slide ng-repeat="post  in posts | orderBy: '-created_at'" active="slide.active">
+                              <a href="#/home/{{post.id}}" title="click to show comments for  {{post.title}}">
+                              <img ng-src="{{post.avatar_content_type}}" style="width:100%"/>
+                              </a>
+                              </slide>
+                            </carousel>
+                     </div>
+                  </div>
+                  <!-- close container1-->
+
+                 <div class="container" style="background-color:rgb(206, 206, 206);margin-left:-15px;margin-top:37px;">
+                       
+                        <div class="col-md-8"  style="background-color:#fff;margin-left: 175px;">
+                        <p style="  margin-top: 20px;font-size:35px"><span>Posts</span>
+                             <a ng-show="current_user[0]" style="float:right"href='#/posts/new' class="btn btn-primary"><span class="glyphicon glyphicon-plus">
+                                     Add New Post
+                              </a>
+                        </p>
+                            <div class="col-md-4">
+                         
+                                <div class="row">
+                                    <div class="col-md-4 col-md-offset-4" ng-repeat="post in posts| orderBy: '-created_at' | firstPage:currentPage*pageSize | limitTo:pageSize ">
+
+                                        <p><i>{{post.title}}</i></p>  
+                                      
+                                        <div style="width:400px ;height:400px;overflow:hidden;border-bottom:1px solid black" >
+                                             <a href="#/home/{{post.id}}" title="click to show comments for  {{post.title}}">
+
+                                               <img ng-src="{{post.avatar_content_type}}" id="{{post.id}}" class="img-responsive img-thumbnail" data-toggle="modal" style="  border-radius: 5px;width:400px;height:300px" />
+                                              </a>
+                                              
+                                                       <!-- post comment
+                                                          <div ng-show="aField">Content of aField</div>
+<div ng-show="bField">Content of bField</div>
+<a ng-click="aField=true; bField=false">Show aField</a>
+<a ng-click="aField=false; bField=true">Show bField</a>
+                                                        
+                                                        
+                                                       -->
+                                                     
+                                                          <a ng-click="aField=true; bField=false"><span class="glyphicon glyphicon-comment">&nbsp;comment</span></a>
+                                                           
+                                                          &nbsp;&nbsp;&nbsp;
+                                                          <a ng-click="aField=false; bField=true"><span class="glyphicon glyphicon-comment">&nbsp;review</span></a>
+
+                                                          &nbsp;&nbsp;&nbsp;
+
+                                                          <!-- post show-->
+                                                          <a href="#/posts/{{post.id}}/edit" ng-show=" post.user_id ==current_user[0].id">
+                                                           <span class="glyphicon glyphicon-edit">edit</span>
+                                                          </a>
+
+         <!--
+         
+         ng-show="isReplyFormOpen"
+         ng-show="isReplyForm1Open"
+         -->                                                
+  
+ <div ng-show="aField">
+ <form name= "form">
+     <input type="text" name="comment[body]" ng-model="a" class="text_field" required>
+     
+     <input type="button" class="btn btn-default" ng-disabled="form.$invalid" value="post comment" ng-click="saveComment(a,post.id)"/>
+   </form>
+   </div>
+    <div ng-show="bField">
+ <form name= "form1">
+     <input type="text" name="review[content]" ng-model="review" class="text_field" required>
+     
+     <input type="button" class="btn btn-default" ng-disabled="form1.$invalid" value="post review" ng-click="saveReview(review,post.id)"/>
+   
+   </form>
+   </div>
+                                                             
+
+     
+                                       </div>
+       
+                                     </div>
+
+                                </div>
+
+                        </div>
+
+                   </div>
+              </div>
+
+
+              <div style="text-align:center;">
+   
+     
+             <button ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1" class="btn btn-primary" style="float:left" ><span class="glyphicon glyphicon-chevron-left"></span>PREV </button>
+     
+           <button ng-disabled="currentPage >= posts.length/4-1" ng-click="currentPage=currentPage+1" class="btn btn-primary" style="float:right">NEXT<span class="glyphicon glyphicon-chevron-right"></button>
+  
+  
+            </div> 
+
+</div>
+</div>

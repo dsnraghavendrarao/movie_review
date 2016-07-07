@@ -1,0 +1,164 @@
+<!-- Render Nav bar-->
+<div ng-include src="'/templates/posts/nav.html'"></div>
+<div>
+        <div class="main">
+          <div class="container" style="height:400px  ">
+                      <!-- slider -->        
+                              <div id="slides_control">
+                            
+                                    <carousel interval="myInterval">
+                                      <slide ng-repeat="post  in posts | orderBy: '-created_at'" active="slide.active">
+                                      <a href="#/movie/{{post.id}}" title="click to show comments for  {{post.title}}">
+                                      <img ng-src="{{post.avatar_content_type}}" style="width:100%"/>
+                                      </a>
+                                      </slide>
+                                    </carousel>
+                             </div>
+                          </div>   
+        </div>
+</div>
+<h2>Book a Movie Ticket</h2>
+<div class="col-md-12">
+
+<div class="col-md-6">
+ <p style="float:left;font-size:20px">Search:</p><input type="text" placeholder="Search Movies" class="form-control" data-ng-model="search" style="height:31px;
+width: 40%;float:left">
+ <select name="show-filter" ng-model="theaterFilter" style="float:right"
+    ng-options="theater as theater.content for theater in theaters">
+    <option value="">-select theater-</option>
+  </select> 
+</div>
+  <div class="col-md-6">
+    
+    Sort:
+        <select ng-model="orderProp">
+            <option value="">-select option-</option>
+            <option value="date">Date</option>
+            <option value="rating">Rating</option>
+        </select>
+    <span>{{ d.time | date }}</span>
+
+  <div class="btn-group" role="group" aria-label="veiw" style="float:right">
+  <button type="button" class="btn btn-default showSingle" data-target="1"><span class="glyphicon glyphicon-th"></span></button>
+  <button type="button" class="btn btn-default showSingle" data-target="2"><span class="glyphicon glyphicon-th-large"></span></button>
+  <button type="button" class="btn btn-default showSingle" data-target="3"><span class="glyphicon glyphicon-th-list"></span></button>
+  </div>
+  </div>
+
+</div>
+<div id="div1" class="targetDiv">
+    <div class="row movies-list">
+   
+        <div  class="col-md-4" ng-repeat="post in posts | orderBy:[orderProp,title] | filter:search | filter : {id: theaterFilter.post_id}: true ">
+            <h2 style="text-align:center">{{post.title | uppercase}}</h2>
+            <p style="text-align:center;height:180px;overflow:hidden;margin:auto">
+                <img data-ng-src="{{post.avatar_content_type}}" class="thumb-big">
+            </p>
+            <p style="text-align:center">Released date:- {{post.date|date:'mediumDate'}}</p>    
+            <p style="text-align:center">Website Rating:-<rating ng-model="post.rating" max="5" readonly="true" ></rating></p>
+            <p style="text-align:center">
+                <span class="label label-warning availability">Availability ({{post.availability}})</span>
+                <a ng-href="#/movie/{{post.id}}" class="btn btn-primary ">Review</a>
+                <a ng-href="#/bookTicket/{{post.id}}" class="btn btn-success " role="button" data-ng-disabled="post.availability == 0">Book »</a>
+            </p>
+
+             
+            
+        </div>
+    </div>
+</div>
+
+<!--  -->
+<div id="div2" class="targetDiv">
+    <div class="row movies-list">
+        <div  class="col-md-6" ng-repeat="post in posts | orderBy:[orderProp,title] | filter:search | filter : {id: theaterFilter.post_id}: true ">
+            <h2 style="text-align:center">{{post.title | uppercase}}</h2>
+            <p style="text-align:center;height:180px;overflow:hidden;margin:auto">
+                <img data-ng-src="{{post.avatar_content_type}}" class="thumb-big">
+            </p>
+            <p style="text-align:center">Released date:- {{post.date|date:'mediumDate'}}</p>    
+            <p style="text-align:center">Website Rating:-<rating ng-model="post.rating" max="5" readonly="true"></rating></p>
+            <p style="text-align:center">
+                <span class="label label-warning availability">Availability ({{post.availability}})</span>
+                <a ng-href="#/movie/{{post.id}}" class="btn btn-primary ">Review</a>
+                <a ng-href="#/bookTicket/{{post.id}}" class="btn btn-success " role="button" data-ng-disabled="post.availability == 0">Book »</a>
+            </p>
+
+             
+            
+        </div>
+    </div>
+</div>
+<!--  -->
+<div id="div3" class="targetDiv">
+    <div class="row movies-list">
+        <div  class="col-md-12" style="border:3px solid black" ng-repeat="post in posts | orderBy:[orderProp,title] | filter:search | filter : {id: theaterFilter.post_id}: true " >
+            <div class="col-md-6" style="float:left;margin-top:25px"> <p style="text-align:center;height:200px;overflow:hidden;margin:auto;width:50%;">
+                <img data-ng-src="{{post.avatar_content_type}}" class="thumb-big">
+                </p>
+            </div>
+            <div class="col-md-6" style="float:left">
+            <h2 style="text-align:left">{{post.title | uppercase}}</h2>
+            <p style="text-align:left">Released date:- {{post.date|date:'mediumDate'}}</p>    
+            <p style="text-align:left">Rating:-<rating ng-model="post.rating" max="5" readonly="true" ></rating></p>
+            <p style="text-align:left">Review:-{{post.description}}</p>
+            <p style="text-align:left">
+                <span class="label label-warning availability">Availability ({{post.availability}})</span>
+                <a ng-href="#/movie/{{post.id}}" class="btn btn-primary ">Review</a>
+                <a ng-href="#/bookTicket/{{post.id}}" class="btn btn-success " role="button" data-ng-disabled="post.availability == 0">Book »</a>
+            </p>
+
+             <div ng-show="loading" class="loderdiv"><img  class="loader" src="/images/support-loading.gif"></div>
+                    <style type="text/css">
+                    .loader{
+                      width:50px;
+                      height: 50px;
+                      z-index: 999;
+
+                    }
+                    .loderdiv{
+                      width:50px;
+                      margin: 50px auto;
+                      position: relative;
+
+                    }
+                    </style>
+            
+          </div><br>
+        </div>
+    </div>
+</div>
+<!-- <pagination total-items="bigTotalItems" ng-model="bigCurrentPage" max-size="maxSize" class="pagination-sm" boundary-links="true" style="text-align:center"></pagination>
+ --><!-- <div ng-include src="templates/posts/footer.html"></div> -->
+<div class="navbar navbar-inverse footerdiv">
+<p style="color:white ">Author: NYROS TECHNOLOGIES</p>
+<p style="text-align:center;color:white"> MovieHUB STORE</p>
+</div>
+<style>
+.footerdiv
+{
+background-color: #080808;
+border-radius: 0px;
+}
+</style>
+
+
+
+
+
+
+<script>
+$('.showSingle').on('click', function () {
+    $(this).addClass('selected').siblings().removeClass('selected');
+    $('.targetDiv').hide();
+    $('#div' + $(this).data('target')).show();
+});
+$('.showSingle').first().click();
+
+</script>
+<style>
+.buttons .selected {
+    color: red;
+}
+</style>
+

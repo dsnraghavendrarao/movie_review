@@ -1,0 +1,18 @@
+<div ng-include src="'/templates/posts/nav.html'"></div>
+
+<form name="form">
+  <label class="control-label">
+          Comment the post
+        </label>
+        <div class="controls">
+            <input type="text"
+                   name="comment[body]"
+                   ng-model="comment.body"
+                   class="text_field"
+                   required>
+          
+        </div>
+ 
+   
+       <input type="button" class="btn btn-default" ng-disabled="form.$invalid" value="Create Comment" ng-click="saveComment()"/>
+<a href="#/posts" class="btn btn-info">Back to posts</a>

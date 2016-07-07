@@ -1,0 +1,24 @@
+<div ng-include src="'/templates/posts/nav.html'"></div>
+<br>
+<div flash-alert="success" active-class="in" class="alert fade">   
+    <span class="alert-message">{{flash.message}}</span>
+</div>
+<a href="#/home">Back to Home</a>
+<h2>Sign In</h2>  
+ <div  id="a" class="alert alert-danger" style="display:none" ng-click="hide()">Invalid user details</div>
+<form name="form" >  
+  <div class="form-group">
+    <label for="inputEmail">Email Address</label>
+
+    <input type="email" class="form-control "  id="inputEmail" placeholder="Enter email" name="email" ng-model="user.email" style="height:35px"required >
+   <span style="color:red" ng-show="form.email.$error.email">Enter a valid email</span>
+ 
+  </div>
+  <div class="form-group">
+    <label for="inputPassword">Password</label>
+    <input type="password" class="form-control hei" name="password" id="inputPassword" placeholder="Password" ng-model="user.password" style="height:35px" required >
+  </div> 
+  <input ng-disabled="form.$invalid" type="button" class="btn btn-default" value="Sign In" ng-click="signin()"/>
+ 
+</form> 
+ Not yet Registred .......<a href="#/signup">Sign Up</a>

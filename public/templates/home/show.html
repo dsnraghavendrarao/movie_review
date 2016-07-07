@@ -1,0 +1,65 @@
+<div ng-include src="'/templates/posts/nav.html'"></div>
+<div class="container" >
+<h2 style="text-align:center">post details</h2>
+ <div style="float:left;margin-top: 60px;overflow:inherit
+">
+ <p> <b>Title</b>
+  :{{post.title}}</p>
+  <br>
+  <br>
+
+  <p> <b>Description:</b>{{post.description}}</p>
+
+</div>
+                                   <div style="width:400px ;height:400px;overflow:hidden;float:left;  margin-left: 125px;" >
+
+
+
+                                             <a href="#/home/{{post.id}}" title="click to show comments for  {{post.title}}">
+                                               <img ng-src="{{post.avatar_content_type}}" id="{{post.id}}" class="img-responsive img-thumbnail" data-toggle="modal" style="  bwidth:400px;height:300px" />
+                                              </a>
+                                                
+                                                
+                                                     </div>
+                                          
+                                                    </div>     
+  
+
+                                                             
+
+     
+                                       
+
+
+ 
+
+
+
+<div style="width:400px ;height:400px;overflow:hidden;float:center;margin-left: 347px;" >
+  <tabset>
+
+    <tab heading="comments"> 
+         <b >Post Comments </b>
+<div ng-show="!!!comments[0].length" style="  margin-top: 10px;">No comments available</div>
+<div ng-repeat="comment in comments[0] | orderBy: '-created_at' ">
+<pre>
+<p>{{comment.body}}</p>
+--commented by "<span style="color:green">{{comment.user.email}}</span>"
+</pre>
+</div>
+    </tab>
+    <tab heading="reviews">
+       <b >Post Reviews </b>
+    <div ng-show="!!!reviews[0].length" style="  margin-top: 10px;">No reviews available</div>
+<div ng-repeat="review in reviews[0] | orderBy: '-created_at' ">
+<pre>
+<p>{{review.content}}</p>
+       --reviewed by "<span style="color:green">{{review.user.email}}</span>"
+</pre>
+</div>
+</tab>
+  </tabset>
+</div>
+
+  
+   

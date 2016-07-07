@@ -1,0 +1,45 @@
+<div ng-include src="'/templates/posts/nav.html'"></div>
+<h1>Article</h1>
+
+<table class="table">
+<thead>
+  <td> <b>Title</b></td>
+  <td> <b>Description</b></td>
+
+</thead>
+<!--{{post}} -->
+<tr>
+  <td> {{post.title}}</td>
+  <td> {{post.description}}</td>
+<td><img ng-src="{{post.avatar_content_type}}" id="{{post.id}}" class="img-responsive img-thumbnail" data-toggle="modal" style="  width: 100px;border-radius: 5px;" /></td>
+</tr>
+</table>
+ 
+
+<br>
+
+
+  <tabset>
+
+    <tab heading="comments"> 
+         <b>Post Comments </b>
+<div ng-show="!!!comments[0].length">No comments available</div>
+<div ng-repeat="comment in comments[0]">
+<p>{{comment.body}}</p>
+</div>
+    </tab>
+    <tab heading="reviews">
+       <b>Post Reviews </b>
+    <div ng-show="!!!reviews[0].length">No reviews available</div>
+<div ng-repeat="review in reviews[0]">
+
+<p>{{review.content}}</p>
+</div>
+</tab>
+  </tabset>
+
+</br></br>
+  
+   <a href="#/posts" class="btn btn-info">
+    Back to Articles
+  </a>  

@@ -1,0 +1,25 @@
+<div ng-include src="'/templates/posts/nav.html'"></div>
+<br>
+<br>
+<div  id="a" class="alert alert-danger" style="display:none" ng-click="hide()">Invalid user details</div>
+<a href="#/home">Back to Home</a>
+<h2>Registration Page </h2>  
+<form  name="form">  
+  <div class="form-group">
+    <label for="inputEmail">Email Address</label>
+    <input type="email" class="form-control" id="inputEmail" placeholder="Enter email" name="email" ng-model="user.email" style="height:35px" required>
+ 
+   <span style="color:red" ng-show="form.email.$error.email">Enter a valid email</span>
+  </div>
+  <div class="form-group">
+    <label for="inputPassword">Password</label>
+    <input type="password" class="form-control" name="password" id="inputPassword" placeholder="Password" ng-model="user.password" style="height:35px" required minlength="8">
+   
+   <span style="color:red" ng-show="form.password.$error.minlength">Min 8 letters</span>
+  </div> 
+  <div class="form-group">
+    <label for="inputConfirmPassword" placeholder="Confirm Password">ConfirmPassword</label>
+    <input type="password" class="form-control" name="confirmpassword" id="inputPassword" placeholder="Confirm Password" ng-model="user.confirmpassword" style="height:35px" required>
+  </div> 
+  <input ng-disabled="form.$invalid" type="button" class="btn btn-default" value="Sign Up" ng-click="signup()"/>
+</form> 

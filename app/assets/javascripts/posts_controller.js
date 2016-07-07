@@ -1,0 +1,604 @@
+PostsIndexCtrl = function($scope,Post,$location,Auth,flash) {
+
+   $scope.posts = Post.query();
+   $scope.isReadonly = false;
+$scope.user={};
+  $scope.current_user=[];
+$scope.currentPage = 0;
+$scope.pageSize = 1;
+
+   Auth.currentUser().then(function(user) {
+            $scope.current_user.push(user);
+            console.log(user); // => {id: 1, ect: '...'}
+        }, function(error) {
+             return $location.path("/signin");
+        });
+
+
+ $scope.logout =function(){
+           var config = {
+            headers: {
+                'X-HTTP-Method-Override': 'DELETE'
+            }
+        };
+       
+        // Log in user...
+        // ...
+        Auth.logout(config).then(function(oldUser) {
+            // alert(oldUser.name + "you're signed out now.");
+            return $location.path("/signin");
+        }, function(error) {
+            // An error occurred logging out.
+        });
+
+        $scope.$on('devise:logout', function(event, oldCurrentUser) {
+            // ...
+        });
+        
+}
+ 
+
+ 
+  
+  
+  return $scope.destroy = function() {
+    var original;
+    
+    if (confirm("Are you sure?")) {
+
+      original = this.post;
+      return this.post.destroy(function() {
+          //  return $scope.posts = _.without($scope.posts, original);
+          return $location.path("/p");
+         
+      });
+    }
+  }
+
+
+
+
+  $scope.limit = 3;
+   
+   $scope.loading = false;
+   $scope.startList = 1;
+   $scope.page = 260;
+    $scope.loadMore = function () {
+
+            $scope.loading = true;
+
+
+            $timeout(function(){
+                 $http.get("/posts.json?page="+$scope.startList+"").success(function (data) {
+                $scope.totalItems=data.length;
+                angular.forEach(data,function (key) {
+                    $scope.posts.push(key);
+                });
+                //$scope.stopLoadingData = ($scope.products.length === $scope.totalItems);
+                $scope.startList += 1;
+            });
+            if($scope.totalItems < 1){
+              $scope.loading = false;
+            }
+            $timeout(function(){
+              $scope.loading = false;
+            },500);
+
+            }, 500);
+    };
+
+
+
+   $scope.loadMore();
+
+angular.module("posts", ["ngResource"]).directive('whenScrolled', function($window) {
+    return function(scope, elm, attr) {
+        var raw = elm[0];
+
+        angular.element($window).bind('scroll', function() {
+
+          //  if (this.scrollTop + this.offsetHeight >= this.scrollHeight) {
+              if(this.pageYOffset >= scope.page){
+                scope.$apply(attr.whenScrolled);
+                 scope.loading = true;
+                 scope.page += scope.page;
+
+
+            }
+
+        });
+    };
+});
+
+
+
+
+
+  };
+  
+
+PostsIndexCtrl.$inject = ['$scope', 'Post','$location','Auth','flash'];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+PostsCreateCtrl = function($scope, $location, Post,Auth,FileUploader,Upload,$http) {
+
+
+
+$scope.today = function() {
+    $scope.dt = new Date();
+  };
+  $scope.today();
+
+  $scope.clear = function () {
+    $scope.dt = null;
+  };
+
+
+  $scope.toggleMin = function() {
+    $scope.minDate = $scope.minDate ? null : new Date();
+  };
+  $scope.toggleMin();
+
+  $scope.open = function($event) {
+    $event.preventDefault();
+    $event.stopPropagation();
+
+    $scope.opened = true;
+  };
+
+  $scope.dateOptions = {
+    formatYear: 'yy',
+    startingDay: 1
+  };
+
+  $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+  $scope.format = $scope.formats[0];
+
+  var tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  var afterTomorrow = new Date();
+  afterTomorrow.setDate(tomorrow.getDate() + 2);
+  $scope.events =
+    [
+      {
+        date: tomorrow,
+        status: 'full'
+      },
+      {
+        date: afterTomorrow,
+        status: 'partially'
+      }
+    ];
+
+  $scope.getDayClass = function(date, mode) {
+    if (mode === 'day') {
+      var dayToCheck = new Date(date).setHours(0,0,0,0);
+
+      for (var i=0;i<$scope.events.length;i++){
+        var currentDay = new Date($scope.events[i].date).setHours(0,0,0,0);
+
+        if (dayToCheck === currentDay) {
+          return $scope.events[i].status;
+        }
+      }
+    }
+
+    return '';
+  };
+
+
+
+ // $scope.toggleMin = function() {
+ //    $scope.minDate = $scope.minDate ? null : new Date();
+ //  };
+ //  $scope.toggleMin();
+
+ //  $scope.open = function($event) {
+ //    $event.preventDefault();
+ //    $event.stopPropagation();
+
+ //    $scope.opened = true;
+ //  };
+
+
+
+
+
+
+
+
+
+
+
+
+    
+  $scope.logout =function(){
+           var config = {
+            headers: {
+                'X-HTTP-Method-Override': 'DELETE'
+            }
+        };
+        // Log in user...
+        // ...
+        Auth.logout(config).then(function(oldUser) {
+            // alert(oldUser.name + "you're signed out now.");
+            return $location.path("/signin");
+        }, function(error) {
+            // An error occurred logging out.
+        });
+
+        $scope.$on('devise:logout', function(event, oldCurrentUser) {
+            // ...
+        });
+         }
+   $scope.current_user=[];
+  Auth.currentUser().then(function(user) {
+            $scope.current_user.push(user);
+            console.log(user); // => {id: 1, ect: '...'}
+        }, function(error) {
+             return $location.path("/signin");
+        });
+
+  return $scope.save = function(title,desc,rating,date,availability,files) {
+
+//data = $scope.post;
+
+    if (files && files.length) {
+         for (var i = 0; i < files.length; i++) {
+             var file = files[i];
+             var data=$scope.post;
+               Upload.upload({
+                   method: 'POST',
+                   url: '/posts',
+                  fields: {'title': $scope.post.title,'description':$scope.post.description,'rating':$scope.post.rating,'date':$scope.post.date,'availability':$scope.post.availability},
+                  file: file,
+                  fileFormDataName: 'post[avatar]'
+                })
+             .success(function (data, status, headers, config) {
+                    console.log('file ' + config.file.name + 'uploaded. Response: ' + data);
+                      return $location.path("/home");
+         
+                }).error(function (data, status, headers, config) {
+                    console.log('error status: ' + status);
+                })
+         }
+     }
+
+  
+  };
+};
+
+PostsCreateCtrl.$inject = ['$scope', '$location', 'Post','Auth','FileUploader','Upload','$http'];
+
+PostsShowCtrl = function($scope, $location, $routeParams, Post,$http,Auth,flash) {
+  $scope.logout =function(){
+           var config = {
+            headers: {
+                'X-HTTP-Method-Override': 'DELETE'
+            }
+        };
+        // Log in user...
+        // ...
+        Auth.logout(config).then(function(oldUser) {
+            // alert(oldUser.name + "you're signed out now.");
+            return $location.path("/signin");
+        }, function(error) {
+            // An error occurred logging out.
+        });
+
+        $scope.$on('devise:logout', function(event, oldCurrentUser) {
+            // ...
+        });
+         }
+
+      
+
+      $scope.saveComment = function(a,b,c) {
+         Auth.currentUser().then(function(user) {
+            $scope.current_user.push(user);
+            console.log(user); // => {id: 1, ect: '...'}
+        }, function(error) {
+          flash.success = 'You Need to signin first '; 
+
+             return $location.path("/signin");
+        });
+    
+   $http({
+    method: 'POST',
+    url: '/comments',
+    data: $.param({PostId: b,body: a,custom_rating: c}),
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+   }).success(function(result){
+    console.log(result);
+      return $location.path("home/"+b);
+});
+}
+$scope.comments = [];
+  $http({
+    method: 'GET',
+    url: '/comments/'+$routeParams.id+'/',
+    
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+   }).success(function(result){
+    console.log(result);
+    return $scope.comments.push(result);
+      
+});   
+ 
+
+   $scope.current_user=[];
+  Auth.currentUser().then(function(user) {
+            $scope.current_user.push(user);
+            console.log(user); // => {id: 1, ect: '...'}
+        }, function(error) {
+flash.success = 'You Need to signin first '; 
+             return $location.path("/signin");
+
+        });
+$scope.comments = [];
+  $http({
+    method: 'GET',
+    url: '/comments/'+$routeParams.id+'/',
+    
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+   }).success(function(result){
+    console.log(result);
+    return $scope.comments.push(result);
+      
+});
+   $scope.reviews = [];
+  $http({
+    method: 'GET',
+    url: '/reviews/'+$routeParams.id+'/',
+    
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+   }).success(function(result){
+    console.log(result);
+    return $scope.reviews.push(result);
+      
+});
+
+
+
+
+ $scope.post = [];
+  $http({
+    method: 'GET',
+    url: '/posts/'+$routeParams.id+'/',
+    
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+   }).success(function(result){
+    console.log(result);
+    return $scope.post.push(result);
+      
+});
+
+  Post.get({
+    id: $routeParams.id
+  }, function(post) {
+    this.original = post;
+    return $scope.post = new Post(this.original);
+   
+  });
+
+  return $scope.destroy = function() {
+    if (confirm("Are you sure?")) {
+      return $scope.post.destroy(function() {
+        return $location.path("/posts");
+      });
+    }
+  };
+
+
+};
+
+PostsShowCtrl.$inject = ['$scope', '$location', '$routeParams', 'Post','$http','Auth','flash'];
+
+PostsEditCtrl = function($scope, $location, $routeParams, Post,$http,Auth,Upload) {
+  $scope.logout =function(){
+           var config = {
+            headers: {
+                'X-HTTP-Method-Override': 'DELETE'
+            }
+        };
+        // Log in user...
+        // ...
+        Auth.logout(config).then(function(oldUser) {
+            // alert(oldUser.name + "you're signed out now.");
+            return $location.path("/signin");
+        }, function(error) {
+            // An error occurred logging out.
+        });
+
+        $scope.$on('devise:logout', function(event, oldCurrentUser) {
+            // ...
+        });
+         }
+ $scope.current_user=[];
+  Auth.currentUser().then(function(user) {
+            $scope.current_user.push(user);
+            console.log(user); // => {id: 1, ect: '...'}
+        }, function(error) {
+             return $location.path("/signin");return $scope.saveComment = function() {
+    
+    var PostId = $routeParams.id;
+   alert('im');
+   $http({
+    method: 'POST',
+    url: '/comments',
+    data: $.param({PostId: PostId,body: $scope.comment.body}),
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+   }).success(function(result){
+    console.log(result);
+      return $location.path("/home");
+});
+
+    
+  };
+        });
+
+
+  Post.get({
+    id: $routeParams.id
+  }, function(post) {
+    this.original = post;
+    return $scope.post = new Post(this.original);
+  });
+  $scope.isClean = function() {
+    return angular.equals(this.original, $scope.post);
+  };
+  $scope.destroy = function() {
+    if (confirm("Are you sure?")) {
+      return $scope.post.destroy(function() {
+        return $location.path("/home");
+      });
+    }
+  };
+   
+  return $scope.save = function(title,desc,rating,date,availability,files) {
+
+
+//data = $scope.post;
+
+    if (files && files.length) {
+         for (var i = 0; i < files.length; i++) {
+             var file = files[i];
+             var data=$scope.post;
+               Upload.upload({
+                   method: 'PUT',
+                   url: '/posts/'+$routeParams.id+'/edit',
+                  fields: {'title': $scope.post.title,'description':$scope.post.description,'rating':$scope.post.rating,'date':$scope.post.date,'availability':$scope.post.availability},
+                  file: file,
+                  fileFormDataName: 'post[avatar]'
+                }).success(function (data, status, headers, config) {
+                    console.log('file ' + config.file.name + 'uploaded. Response: ' + data);
+                      return $location.path("/home");
+         
+                }).error(function (data, status, headers, config) {
+                    console.log('error status: ' + status);
+                })
+  }
+}
+}
+};
+
+PostsEditCtrl.$inject = ['$scope', '$location', '$routeParams', 'Post','$http','Auth','Upload'];
+
+PostsCommentCtrl = function($scope, $location, $routeParams, Post,$http,Auth) {
+  $scope.logout =function(){
+           var config = {
+            headers: {
+                'X-HTTP-Method-Override': 'DELETE'
+            }
+        };
+        // Log in user...
+        // ...
+        Auth.logout(config).then(function(oldUser) {
+            // alert(oldUser.name + "you're signed out now.");
+            return $location.path("/signin");
+        }, function(error) {
+            // An error occurred logging out.
+        });
+
+        $scope.$on('devise:logout', function(event, oldCurrentUser) {
+            // ...
+        });
+         }
+ $scope.current_user=[];
+Auth.currentUser().then(function(user) {
+            $scope.current_user.push(user);
+            console.log(user); // => {id: 1, ect: '...'}
+        }, function(error) {
+             return $location.path("/signin");
+        });
+  
+  return $scope.saveComment = function() {
+    
+    var PostId = $routeParams.id;
+   $http({
+    method: 'POST',
+    url: '/comments',
+    data: $.param({PostId: PostId,body: $scope.comment.body}),
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+   }).success(function(result){
+    console.log(result);
+      return $location.path("/home");
+});
+
+    
+  };
+    
+};
+
+PostsCommentCtrl.$inject = ['$scope', '$location', '$routeParams', 'Post','$http','Auth'];
+
+
+PostsReviewCtrl = function($scope, $location, $routeParams, Post,$http,Auth) {
+  $scope.logout =function(){
+           var config = {
+            headers: {
+                'X-HTTP-Method-Override': 'DELETE'
+            }
+        };
+        // Log in user...
+        // ...
+        Auth.logout(config).then(function(oldUser) {
+            // alert(oldUser.name + "you're signed out now.");
+            return $location.path("/signin");
+        }, function(error) {
+            // An error occurred logging out.
+        });
+
+        $scope.$on('devise:logout', function(event, oldCurrentUser) {
+            // ...
+        });
+         }
+ $scope.current_user=[];
+Auth.currentUser().then(function(user) {
+            $scope.current_user.push(user);
+            console.log(user); // => {id: 1, ect: '...'}
+        }, function(error) {
+             return $location.path("/signin");
+        });
+  
+  return $scope.saveReview = function() {
+    
+    var PostId = $routeParams.id;
+   
+   $http({
+    method: 'POST',
+    url: '/reviews',
+    data: $.param({PostId: PostId,content: $scope.review.content}),
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+   }).success(function(result){
+    console.log(result);
+      return $location.path("/home");
+});
+
+    
+  };
+    
+};
+
+PostsReviewCtrl.$inject = ['$scope', '$location', '$routeParams', 'Post','$http','Auth'];
+
+
+
+
+

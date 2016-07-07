@@ -1,0 +1,18 @@
+<div ng-include src="'/templates/posts/nav.html'"></div>
+
+<form name="form">
+  <label class="control-label">
+          review the post
+        </label>
+        <div class="controls">
+          
+          <textarea name="review[content]"
+                   ng-model="review.content"
+                   class="text_field"
+                   required></textarea>
+        </div>
+    </form>
+    </br>
+   
+       <input type="button" class="btn btn-default" ng-disabled="form.$invalid" value=" submit " ng-click="saveReview()"/>
+<a href="#/posts" class="btn btn-info">Back to posts</a>

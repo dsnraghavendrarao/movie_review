@@ -1,0 +1,76 @@
+
+<div ng-include src="'/templates/posts/nav.html'"></div>
+<div flash-alert="success" active-class="in" class="alert fade">
+    <strong class="alert-heading">Congrats!</strong>
+    <span class="alert-message">{{flash.message}}</span>
+</div>
+<h1> Articles</h1>
+<table class="table table-striped">
+
+        <tr>
+
+            <th width="23%">TITLE</th>
+
+            <th>DESCRIPTION</th>
+            <th colspan="4" style="text-align:center">Actions</th>
+
+        </tr>
+
+        <tr ng-repeat="post in posts | firstPage:currentPage*pageSize | limitTo:pageSize">
+
+            <td> <a href="#/posts/{{post.id}}" title="click to show comments for  {{post.title}}">
+          {{post.title}}
+        </a></td>
+              
+            <td>{{ post.description }}</td>
+             <td ><a href="#/posts/{{post.id}}/comments"
+          class="btn btn-primary"></i>
+          Comment 
+        </a></td>
+
+             <td ><a href="#/posts/{{post.id}}/reviews"
+          class="btn btn-primary">
+          Review 
+        </a></td>
+            <td ng-show=" post.user_id ==current_user[0].id">
+          <button ng-click="destroy()" class="btn btn-danger">
+         <span class="glyphicon glyphicon-trash"></span> 
+
+        </button>
+        </td>
+         <td ng-show=" post.user_id ==current_user[0].id">
+          <a href="#/posts/{{post.id}}/edit"
+          class="btn btn-primary">
+          <span class="glyphicon glyphicon-edit"></span>
+          
+              
+
+       </td>
+       
+        
+     
+     
+</tr>
+    </table>
+
+ <div style="text-align:center">
+    <div class="pagination" >
+<center>
+        <button ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1" class="btn btn-primary" ><span class="glyphicon glyphicon-chevron-left"></span> </button>
+         
+         <span ng-show="!!!posts.length">0/{{posts.length}}</span>
+        <span ng-hide="!!!posts.length">{{currentPage+1}}/{{posts.length}}</span>
+       
+       
+
+        <button ng-disabled="currentPage >= posts.length-1" ng-click="currentPage=currentPage+1" class="btn btn-primary"><span class="glyphicon glyphicon-chevron-right"></button>
+  
+    </div>  
+    </div>  
+
+<p>
+  <a href='#/posts/new' class="btn btn-primary">
+   Post an Article
+  </a>
+</p>
+

@@ -1,0 +1,116 @@
+<div ng-include src="'/templates/posts/nav.html'"></div>
+<form name="newPost">
+  <fieldset>
+    <legend>
+      New Post
+    </legend>
+      <div class="control-group">
+        <label class="control-label">
+          Title
+        </label>
+        <div class="form-group">
+            <input type="text"
+                   name="post[title]"
+                   ng-model="post.title"
+                   class="text_field"
+                   required>
+          <span ng-show="newPost.title.$error.required"
+                class="help-inline">
+            Required
+          </span>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label">
+          description
+        </label>
+        <div class="controls">
+            <textarea name="post[description]"
+                   ng-model="post.description"
+                   class="text_field"
+                   required></textarea>
+          <span ng-show="newPost.description.$error.required"
+                class="help-inline">
+            Required
+          </span>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label">
+          Rating
+        </label>
+        <div class="controls">
+            <input type="text"
+                   name="post[rating]"
+                   ng-model="post.rating"
+                   class="text_field"
+                   required>
+          <span ng-show="newPost.rating.$error.required"
+                class="help-inline">
+            Required
+          </span>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label">
+          Releasing date
+        </label>
+        <div class="controls">
+          <p class="input-group">
+            <input type="text"
+                   name="post[date]"
+                   ng-model="post.date"
+                   class="text_field"
+                   datepicker-popup="MM-dd-yyyy" 
+                     ng-model="dt" 
+                     is-open="opened" 
+                     min-date="minDate"
+                     ng-click="open($event)"
+                     max-date="'2020-1001'"
+                     ng-required="true" 
+                     show-button-bar="false"
+                   required>
+                    <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+            </p>      
+          <span ng-show="newPost.date.$error.required"
+                class="help-inline">
+            Required
+          </span>
+        </div>
+      </div>
+      
+      <div class="control-group">
+        <label class="control-label">
+          Availability
+        </label>
+        <div class="controls">
+            <input type="text"
+                   name="post[availability]"
+                   ng-model="post.availability"
+                   class="text_field"
+                   required>
+          <span ng-show="newPost.availability.$error.required"
+                class="help-inline">
+            Required
+          </span>
+        </div>
+      </div>
+               <input type="file" ngf-select ng-model="post.avatar" class="file upload"   name="file"  accept="image/*" required>
+             
+    <div class="form-actions">
+      <button class="btn btn-success" ng-click="save(post.title,post.description,post.rating,post.date,post.availability,post.avatar)"
+        ng-disabled="isClean() || newPost.$invalid">
+        <i class="icon-save"></i> Save
+      </button>
+      <button ng-click="destroy()"
+              ng-show="post.id"
+              class="btn btn-danger">
+              <i class="icon-trash"></i> Delete
+      </button>
+      <a href="#/home" class="btn btn-info">Back to Home</a>
+    </div>
+  </fieldset>
+</form>
+
+
+            

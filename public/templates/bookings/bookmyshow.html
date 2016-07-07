@@ -1,0 +1,122 @@
+<div ng-include src="'/templates/posts/nav.html'"></div>
+<br>
+<a data-ng-click="back()" class="btn btn-info pull-right" href="#/home">Back</a>
+<a data-ng-click="back()" class="btn btn-info pull-left" href="#/movie/{{post.id}}"> << Back to Review</a>
+ </br>
+    <div class= "col-md-12">
+        <h3>{{post.title | uppercase}}</h3>
+        <h4>Website rating:- <rating ng-model="post.rating" max="5" readonly="true"></rating></h4>
+        <hr>
+    </div>
+
+    <div class="row" >
+        <div class ="col-md-8">
+            <form role="form" name ="form1">
+                <div class="form-group col-md-8">
+                    <div><label for="qty"> Quantity</label></div>
+                    <div><input type="text" name="booking[ticket]" ng-model="ticket" class="text_field" style="height:31px;width: 219px;" reqired></div>
+                </div>
+                <div class="form-group col-md-8">
+                    <div><label for="theater"> Select Theater</label></div>
+                    <div><select name="show-filter" ng-model="cinema"
+                        ng-options="review as review.content for review in reviews[0]" required>
+                        <option value="">-select theater-</option>
+                    </select></div>
+                </div>
+                <div class="form-group col-md-8">
+                    <div><label for="date">Date</label></div>
+                    <div class="inner-addon right-addon"><input type="text" name="booking[date]" ng-model="date" class="text_field" style="height:31px;width:205px;" datepicker-popup="MM-dd-yyyy" ng-model="dt" is-open="opened" min-date="minDate" ng-click="open($event)" max-date="'2020-1001'" ng-required="true" show-button-bar="false" required> <i class="glyphicon glyphicon-calendar"></i>
+                    </div>     
+                </div>
+                <div class="form-group col-md-8" >
+                    <button type="submit" class="btn btn-success green" ng-disabled="form1.$invalid"  ng-click="saveBooking(date,post.id,ticket,post.availability)"><i class="fa fa-share"></i> Buy Ticket</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-4">
+            <h4>Review</h4>
+            <label class="text-justify">
+                <img data-ng-src="{{post.avatar_content_type}}" class="bookThumb pull-left">
+            </label>
+            <p>{{post.description}}</p>
+        </div>    
+    <div>
+</div>
+</div>
+
+
+
+
+
+<!--     <div class="row">
+        <div class="col-md-8">
+            <form role="form" name= "form1">
+                <div class="form-group">
+                    <label for="qty">Quantity</label><br>
+                     <input type="text" name="booking[ticket]" ng-model="ticket" class="text_field" reqired>
+                    <span data-ng-hide="bookTickets.qty.$valid" class=" alert-danger">Please Enter a Valid Number</span>
+                </div>
+                <div class="form-group">
+                    <label for="theater">Select theater</label>
+                    <select name="show-filter" ng-model="cinema" style="float:right"
+                        ng-options="review as review.content for review in reviews[0]" required>
+                        <option value="">-select theater-</option>
+                    </select> {{cinema.content}}
+                    <label for="date">Date</label>
+                    <p class="input-group">
+            <input type="text"
+                   name="booking[date]"
+                   ng-model="date"
+                   class="text_field"
+                   datepicker-popup="MM-dd-yyyy" 
+                     ng-model="dt" 
+                     is-open="opened" 
+                     min-date="minDate"
+                     ng-click="open($event)"
+                     max-date="'2020-1001'"
+                     ng-required="true" 
+                     show-button-bar="false"
+                   required>
+                    <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+            </p>     
+                </div>
+ 
+                <button type="submit" class="btn btn-success green" ng-disabled="form1.$invalid"  ng-click="saveBooking(date,post.id,ticket,post.availability)"><i class="fa fa-share"></i> Buy Ticket</button>
+            </form>
+
+
+
+
+        </div>
+        <div class="col-md-4">
+            <h4>Review</h4>
+            <label class="text-justify">
+                <img data-ng-src="{{post.avatar_content_type}}" class="bookThumb pull-left">
+            </label>
+            <p>{{post.description}}</p>
+        </div>
+    </div>
+</div>
+ -->
+
+
+<!-- <div ng-include src="'/templates/posts/footer.html'"></div> -->
+<div class="navbar navbar-inverse footerdiv">
+<p style="color:white ">Author: NYROS TECHNOLOGIES</p>
+<p style="text-align:center;color:white"> MovieHUB STORE</p>
+</div>
+
+<style>
+.datewidth
+{
+height: 31px;
+width: 219px;
+}
+.footerdiv
+{
+background-color: #080808;
+border-radius: 0px;
+}
+</style>
+
+

@@ -1,0 +1,208 @@
+<div ng-include src="'/templates/posts/nav.html'"></div>
+
+{{theaters}}
+
+<br/>
+<a ng-click="back()" class="btn btn-info pull-right" href="#/home">Back</a>
+<a ng-click="back()" class="btn btn-info pull-left" href="#/bookTicket/{{post.id}}">Buy ticket</a>
+
+<br/>
+
+<div>
+    <h3>{{post.title | uppercase}}</h3>
+    <div class="row">
+        <div class="col-md-4">
+            <img data-ng-src="{{post.avatar_content_type}}">
+        </div>
+        <div class="col-md-6">
+            <h4>Review:-</h4>
+            <rating ng-model="post.rating" max="5" readonly="true" ></rating><br>
+            <h4>Movie Available in:</h4><div ng-repeat="review in reviews[0]">
+                <h2 class="label label-primary">{{review.content}}</h2>
+            </div>
+            <hr>
+            <label>{{post.description}}</label>
+        </div>
+    </div>
+</div>
+
+<div class="row" ng-show="current_user[0].email">
+    <div class="col-md-12">
+                            <div class="widget-area no-padding blank">
+                                <div class="status-upload">
+                                    <p>{{current_user[0].email}} Hello please post your comment </p>
+                                    <form name= "form">
+
+                                        <textarea placeholder="add comment about movie............!" name="comment[body]" ng-model="a" class="text_field" required></textarea>
+                                         
+                                         <h4>Rating:-<rating ng-model="rate" max="5" readonly="isReadonly" on-hover="hoveringOver(value)" on-leave="overStar = null" ></rating></h4>
+    <span class="label" ng-class="{'label-warning': percent<30, 'label-info': percent>=30 && percent<70, 'label-success': percent>=70}" ng-show="overStar && !isReadonly">{{percent}}%</span>
+     <!-- <pre style="margin:15px 0;">Rate: <b>{{rate}}</b> - Readonly is: <i>{{isReadonly}}</i> - Hovering over: <b>{{overStar || "none"}}</b></pre>
+ -->
+
+                                        <button type="submit" class="btn btn-success green" ng-disabled="form.$invalid"  ng-click="saveComment(a,post.id,rate)"><i class="fa fa-share"></i> POST COMMENT</button>
+
+                                    </form>
+                                </div><!-- Status Upload  -->
+                            </div><!-- Widget Area -->
+                        </div>
+        
+    </div>
+
+<br>
+
+
+<div ng-show="!!!comments[0].length" style="margin-top: 10px;text-align:center">ADD YOUR COMMENT</div>
+<p style="color:blue">Previous Comments</p>
+
+<div ng-repeat="comment in comments[0] | orderBy: '-created_at' ">
+<pre style="background-color:white">
+<span style="float:right">{{comment.user.email}}</span>
+<p>{{comment.body}}<h4><span class="label label-success">Rating:-<rating ng-model="comment.custom_rating" max="5" readonly="true" ></rating></span></h4></p>
+</pre>
+</div>
+
+
+
+
+<!-- <div ng-include src="'/templates/posts/footer.html'"></div>
+ -->
+<div class="navbar navbar-inverse footerdiv">
+<p style="color:white ">Author: NYROS TECHNOLOGIES</p>
+<p style="text-align:center;color:white"> MovieHUB STORE</p>
+</div>
+<style>
+.footerdiv
+{
+background-color: #080808;
+border-radius: 0px;
+}
+</style>
+
+<style>
+body{ background: #fafafa;}
+.widget-area.blank {
+background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+-webkit-box-shadow: none;
+-moz-box-shadow: none;
+-ms-box-shadow: none;
+-o-box-shadow: none;
+box-shadow: none;
+}
+body .no-padding {
+padding: 0;
+}
+.widget-area {
+background-color: #fff;
+-webkit-border-radius: 4px;
+-moz-border-radius: 4px;
+-ms-border-radius: 4px;
+-o-border-radius: 4px;
+border-radius: 4px;
+-webkit-box-shadow: 0 0 16px rgba(0, 0, 0, 0.05);
+-moz-box-shadow: 0 0 16px rgba(0, 0, 0, 0.05);
+-ms-box-shadow: 0 0 16px rgba(0, 0, 0, 0.05);
+-o-box-shadow: 0 0 16px rgba(0, 0, 0, 0.05);
+box-shadow: 0 0 16px rgba(0, 0, 0, 0.05);
+float: left;
+margin-top: 30px;
+padding: 25px 30px;
+position: relative;
+width: 100%;
+}
+.status-upload {
+background: none repeat scroll 0 0 #f5f5f5;
+-webkit-border-radius: 4px;
+-moz-border-radius: 4px;
+-ms-border-radius: 4px;
+-o-border-radius: 4px;
+border-radius: 4px;
+float: left;
+width: 100%;
+}
+.status-upload form {
+float: left;
+width: 100%;
+}
+.status-upload form textarea {
+background: none repeat scroll 0 0 #fff;
+border: medium none;
+-webkit-border-radius: 4px 4px 0 0;
+-moz-border-radius: 4px 4px 0 0;
+-ms-border-radius: 4px 4px 0 0;
+-o-border-radius: 4px 4px 0 0;
+border-radius: 4px 4px 0 0;
+color: #777777;
+float: left;
+font-family: Lato;
+font-size: 14px;
+height: 142px;
+letter-spacing: 0.3px;
+padding: 20px;
+width: 100%;
+resize:vertical;
+outline:none;
+border: 1px solid #F2F2F2;
+}
+
+.status-upload ul {
+float: left;
+list-style: none outside none;
+margin: 0;
+padding: 0 0 0 15px;
+width: auto;
+}
+.status-upload ul > li {
+float: left;
+}
+.status-upload ul > li > a {
+-webkit-border-radius: 4px;
+-moz-border-radius: 4px;
+-ms-border-radius: 4px;
+-o-border-radius: 4px;
+border-radius: 4px;
+color: #777777;
+float: left;
+font-size: 14px;
+height: 30px;
+line-height: 30px;
+margin: 10px 0 10px 10px;
+text-align: center;
+-webkit-transition: all 0.4s ease 0s;
+-moz-transition: all 0.4s ease 0s;
+-ms-transition: all 0.4s ease 0s;
+-o-transition: all 0.4s ease 0s;
+transition: all 0.4s ease 0s;
+width: 30px;
+cursor: pointer;
+}
+.status-upload ul > li > a:hover {
+background: none repeat scroll 0 0 #606060;
+color: #fff;
+}
+.status-upload form button {
+border: medium none;
+-webkit-border-radius: 4px;
+-moz-border-radius: 4px;
+-ms-border-radius: 4px;
+-o-border-radius: 4px;
+border-radius: 4px;
+color: #fff;
+float: right;
+font-family: Lato;
+font-size: 14px;
+letter-spacing: 0.3px;
+margin-right: 9px;
+margin-top: 9px;
+padding: 6px 15px;
+}
+.dropdown > a > span.green:before {
+border-left-color: #2dcb73;
+}
+.status-upload form button > i {
+margin-right: 7px;
+}
+
+</style>
+
+

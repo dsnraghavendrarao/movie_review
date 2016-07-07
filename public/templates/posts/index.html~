@@ -1,0 +1,99 @@
+
+<div ng-include src="'/templates/posts/nav.html'"></div>
+<h1>Posts</h1>
+<table class="table table-striped">
+
+        <tr>
+
+            <th width="23%">TITLE</th>
+
+            <th>DESCRIPTION</th>
+            <th colspan="3">Actions</th>
+
+        </tr>
+
+        <tr ng-repeat="post in posts | firstPage:currentPage*pageSize | limitTo:pageSize">
+
+            <td> <a href="#/posts/{{post.id}}" title="click to show comments for  {{post.title}}">
+          {{post.title}}
+        </a></td>
+
+            <td>{{ post.description }}</td>
+            <td ng-show=" post.user_id ==current_user[0].id">
+            <a href="#/posts/{{post.id}}/edit"
+          class="btn btn-primary"><i class="icon-edit"></i>
+          Edit
+          </a>
+              
+
+       </td>
+       <td ><a href="#/posts/{{post.id}}/comments"
+          class="btn btn-primary"><i class="icon-edit"></i>
+          Comment the post
+        </a></td>
+        
+      <td ng-show=" post.user_id ==current_user[0].id">
+         <button ng-click="destroy()" class="btn btn-danger">
+          <i class="icon-trash"></i> Delete
+        </button>
+      </td>
+</tr>
+    </table>
+
+ 
+    <div class="pagination">
+
+        <button ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">Pre</button>
+
+        <span>{{currentPage+1}}/{{posts.length}}</span>
+
+        <button ng-disabled="currentPage >= posts.length-1" ng-click="currentPage=currentPage+1">Nex</button>
+  
+    </div>    
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+
+        <th>Title</th>
+        <th>description</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tdescription>
+    <tr ng-repeat="post in posts">
+
+      <td>
+        <a href="#/posts/{{post.id}}" title="click to show comments for  {{post.title}}">
+          {{post.title}}
+        </a>
+      </td>
+        <td>
+          {{post.description}}
+        </td>
+      <td>
+      <a href="#/posts/{{post.id}}/comments"
+          class="btn btn-primary"><i class="icon-edit"></i>
+          Comment the post
+        </a>
+        <a href="#/posts/{{post.id}}/edit"
+          class="btn btn-primary"><i class="icon-edit"></i>
+          Edit
+        </a>
+       
+
+        <button ng-click="destroy()" class="btn btn-danger">
+          <i class="icon-trash"></i> Delete
+        </button>
+      </td>
+    </tr>
+  </tdescription>
+</table>
+
+<p>
+  <a href='#/posts/new' class="btn btn-primary">
+    <i class="icon-plus"></i>New
+  </a>
+</p>
+
+
